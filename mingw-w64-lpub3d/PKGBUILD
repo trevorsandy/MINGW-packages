@@ -7,6 +7,7 @@ _sha=7a3ff5b553537dcb22c70b1a97487a4386725be0
 # Debug srcname - remove after Dev
 _srcname="${_realname}"
 #_srcname="${_realname}-${_sha:0:8}" - restore after Dev
+_3rdpartydistdir=lpub3d_msys_3rdparty
 pkgbase=mingw-w64-${_realname}
 pkgname=("${MINGW_PACKAGE_PREFIX}-${_realname}")
 pkgver=2.4.9.4393
@@ -75,7 +76,7 @@ noextract=(
 	'ldview.tar.gz'
 	'ldglite.tar.gz')
 sha256sums=(
-	'282b439ed956a6f4a636d6c237ba514973f277a2a77f2d249ea6e84d55d501df'
+	'53a8f9e4681fba68280e9cbf0b858006f59792c984269634e1304b6841616c44'
 	'cc6ae727523369645b8602ce1e777336443f28a5dfe3ed279cb744ffd93da71a'
 	'37e11b52836f12e58e669d39a9e9e3f1672d89c78dc572192f5a6c186c02adf7'
 	'95b65664c455f4895f480ab8e3ed9e96046ca69ee1b296922d76a369e2cf2846'
@@ -90,7 +91,6 @@ prepare() {
 	export MSYS2=1
 	export MSYS=winsymlinks:lnk
 	export MINGW_PREFIX="${MINGW_PREFIX}"
-	export MSYS2_ARG_CONV_EXCL="INSTALL_PREFIX="
 	export PLATFORM_PRETTY="MinGW-W64 MSYS2"
 	export PLATFORM_VER="$(uname -a)"
 	export TARGET_CPU="$(uname -m)"
@@ -104,8 +104,8 @@ prepare() {
 	export LP3D_NO_DEPS="true"
 	export LP3D_LOG_PATH="${WD}"
 	export LP3D_CPU_CORES="$(nproc)"
-	export LP3D_QT5_BIN="${MINGW_PREFIX}/bin"
-	export LP3D_3RD_DIST_DIR="lpub3d_msys_3rdparty"
+	export LP3D_QT5_BIN="${MINGW_PREFIX}/qt5-static/bin"
+	export LP3D_3RD_DIST_DIR="${_3rdpartydistdir}"
 	# create 3rd party assets folder
 	[ ! -d "${LP3D_3RD_DIST_DIR}" ] && mkdir -p "${srcdir}/${LP3D_3RD_DIST_DIR}" || :
 	cd "${srcdir}/${_srcname}"
@@ -142,21 +142,25 @@ prepare() {
 	sed -i "s/\w*$/${_sha:0:8}/" "${LP3D_VER_INFO}" || :
 	# create renderers
 	chmod a+x builds/utilities/CreateRenderers.sh && ./builds/utilities/CreateRenderers.sh
+}
+
+build() {
+	cd "${srcdir}/${_srcname}"
+	export MSYS=winsymlinks:lnk
+	export MSYS2_ARG_CONV_EXCL="INSTALL_PREFIX="
+	export TARGET_VENDOR="MinGW-W64 MSYS2"
+	export PLATFORM_CODE="ap"
+	export PLATFORM_VER="$(uname -a)"
+	export TARGET_CPU="$(uname -m)"
+	export LD_LIBRARY_PATH=${MINGW_PREFIX}/qt5-static/bin:${MINGW_PREFIX}/bin:$LD_LIBRARY_PATH
 	# generate makefiles
-	${LP3D_QT5_BIN}/qmake.exe \
+	${MINGW_PREFIX}/qt5-static/bin/qmake.exe \
 	PREFIX=${MINGW_PREFIX} \
 	CONFIG-=debug_and_release \
 	CONFIG+=release \
 	CONFIG+=build_check \
 	CONFIG+=msys
-}
-
-build() {
-	cd "${srcdir}/${_srcname}"
-	export TARGET_VENDOR="MinGW-W64 MSYS2"
-	export PLATFORM_CODE="ap"
-	export PLATFORM_VER="$(uname -a)"
-	export TARGET_CPU="$(uname -m)"
+	# build package
 	make clean
 	make -j$(nproc)
 	# check lpub3d dependencies
