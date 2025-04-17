@@ -1,5 +1,5 @@
 # Maintainer: Trevor SANDY <trevor[dot]sandy[at]gmail[dot]com>
-#  Last Update: April 15, 2025
+#  Last Update: April 17, 2025
 #  Copyright (C) 2025 by Trevor SANDY
 
 _realname=lpub3d-ci
@@ -20,158 +20,160 @@ msys2_repository_url='https://github.com/trevorsandy'
 msys2_references=("cpe: cpe:/a:lpub3d:lpub3d")
 license=('GPL3')
 makedepends=(
-	"unzip"
-	"autoconf"
-	"automake"
-	"${MINGW_PACKAGE_PREFIX}-gcc"
-	"${MINGW_PACKAGE_PREFIX}-make"
-	"${MINGW_PACKAGE_PREFIX}-cmake"
-	"${MINGW_PACKAGE_PREFIX}-ninja"
-	"${MINGW_PACKAGE_PREFIX}-qt5-tools")
+    "unzip"
+    "autoconf"
+    "automake"
+    "${MINGW_PACKAGE_PREFIX}-gcc"
+    "${MINGW_PACKAGE_PREFIX}-make"
+    "${MINGW_PACKAGE_PREFIX}-cmake"
+    "${MINGW_PACKAGE_PREFIX}-ninja"
+    "${MINGW_PACKAGE_PREFIX}-qt5-tools")
 depends=(
-	"xorgproto"
-	"xorg-util-macros"
-	"${MINGW_PACKAGE_PREFIX}-qt5-base"
-	"${MINGW_PACKAGE_PREFIX}-libpng"
-	"${MINGW_PACKAGE_PREFIX}-libtiff"
-	"${MINGW_PACKAGE_PREFIX}-libjpeg-turbo"
-	"${MINGW_PACKAGE_PREFIX}-gl2ps"
-	"${MINGW_PACKAGE_PREFIX}-tinyxml"
-	"${MINGW_PACKAGE_PREFIX}-minizip"
-	"${MINGW_PACKAGE_PREFIX}-glew"
-	"${MINGW_PACKAGE_PREFIX}-freeglut"
-	"${MINGW_PACKAGE_PREFIX}-boost-libs"
-	"${MINGW_PACKAGE_PREFIX}-boost"
-	"${MINGW_PACKAGE_PREFIX}-openexr"
-	"${MINGW_PACKAGE_PREFIX}-SDL2"
-	"${MINGW_PACKAGE_PREFIX}-libelf"
-	"${MINGW_PACKAGE_PREFIX}-mesa"
-	"${MINGW_PACKAGE_PREFIX}-llvm-libs"
-	"${MINGW_PACKAGE_PREFIX}-llvm")
+    "xorgproto"
+    "xorg-util-macros"
+    "${MINGW_PACKAGE_PREFIX}-qt5-base"
+    "${MINGW_PACKAGE_PREFIX}-libpng"
+    "${MINGW_PACKAGE_PREFIX}-libtiff"
+    "${MINGW_PACKAGE_PREFIX}-libjpeg-turbo"
+    "${MINGW_PACKAGE_PREFIX}-gl2ps"
+    "${MINGW_PACKAGE_PREFIX}-tinyxml"
+    "${MINGW_PACKAGE_PREFIX}-minizip"
+    "${MINGW_PACKAGE_PREFIX}-glew"
+    "${MINGW_PACKAGE_PREFIX}-freeglut"
+    "${MINGW_PACKAGE_PREFIX}-boost-libs"
+    "${MINGW_PACKAGE_PREFIX}-boost"
+    "${MINGW_PACKAGE_PREFIX}-openexr"
+    "${MINGW_PACKAGE_PREFIX}-SDL2"
+    "${MINGW_PACKAGE_PREFIX}-libelf"
+    "${MINGW_PACKAGE_PREFIX}-mesa"
+    "${MINGW_PACKAGE_PREFIX}-llvm-libs"
+    "${MINGW_PACKAGE_PREFIX}-llvm")
 # Debug source - remove after Dev
 source=(
-	'lpub3d-ci.tar.gz'
-	'complete.zip'
-	'lpub3dldrawunf.zip'
-	'tenteparts.zip'
-	'vexiqparts.zip'
-	'povray.tar.gz'
-	'ldview.tar.gz'
-	'ldglite.tar.gz')
+    'lpub3d-ci.tar.gz'
+    'complete.zip'
+    'lpub3dldrawunf.zip'
+    'tenteparts.zip'
+    'vexiqparts.zip'
+    'povray.tar.gz'
+    'ldview.tar.gz'
+    'ldglite.tar.gz')
 #source=(
-#	"${msys2_repository_url}/archive/${_realname}/archive/${_sha}.tar.gz"
-#	"${msys2_repository_url}/lpub3d_libs/releases/download/v1.0.1/complete.zip"
-#	"${msys2_repository_url}/lpub3d_libs/releases/download/v1.0.1/lpub3dldrawunf.zip"
-#	"${msys2_repository_url}/lpub3d_libs/releases/download/v1.0.1/tenteparts.zip"
-#	"${msys2_repository_url}/lpub3d_libs/releases/download/v1.0.1/vexiqparts.zip"
-#	"${msys2_repository_url}/povray/archive/lpub3d/raytracer-cui.tar.gz"
-#	"${msys2_repository_url}/ldview/archive/lpub3d-build.tar.gz"
-#	"${msys2_repository_url}/ldglite/archive/master.tar.gz")
-noextract=(
-	'complete.zip'
-	'lpub3dldrawunf.zip'
-	'tenteparts.zip'
-	'vexiqparts.zip'
-	'povray.tar.gz'
-	'ldview.tar.gz'
-	'ldglite.tar.gz')
-sha256sums=(
-	'53a8f9e4681fba68280e9cbf0b858006f59792c984269634e1304b6841616c44'
-	'cc6ae727523369645b8602ce1e777336443f28a5dfe3ed279cb744ffd93da71a'
-	'37e11b52836f12e58e669d39a9e9e3f1672d89c78dc572192f5a6c186c02adf7'
-	'95b65664c455f4895f480ab8e3ed9e96046ca69ee1b296922d76a369e2cf2846'
-	'e2f4114c8ff6bfe7e5a43b6c88fb47f32328ddb147578456ec0825aa76803b20'
-	'db92fd0f12aaf239cd94943d64dc3ea89e9967f571bb5103dcd39b4805197074'
-	'78bdcdc3dcb860324456beb75fb9c8730149aab2a8a467ceeb289406d01610f5'
-	'8c3f3fc34d7db9390136a4c6344f218c12f8dae514b1c6ca0fdf85298485ae3c')
+#   "${msys2_repository_url}/archive/${_realname}/archive/${_sha}.tar.gz"
+#   "${msys2_repository_url}/lpub3d_libs/releases/download/v1.0.1/complete.zip"
+#   "${msys2_repository_url}/lpub3d_libs/releases/download/v1.0.1/lpub3dldrawunf.zip"
+#   "${msys2_repository_url}/lpub3d_libs/releases/download/v1.0.1/tenteparts.zip"
+#   "${msys2_repository_url}/lpub3d_libs/releases/download/v1.0.1/vexiqparts.zip"
+#   "${msys2_repository_url}/povray/archive/lpub3d/raytracer-cui.tar.gz"
+#   "${msys2_repository_url}/ldview/archive/lpub3d-build.tar.gz"
+#   "${msys2_repository_url}/ldglite/archive/master.tar.gz")
+noextract=('complete.zip'
+    'lpub3dldrawunf.zip'
+    'tenteparts.zip'
+    'vexiqparts.zip'
+    'povray.tar.gz'
+    'ldview.tar.gz'
+    'ldglite.tar.gz')
+sha256sums=('906c30a1c26b2940002f4d3264ef2fcca2da0cda01f344a7f956243c414966fa'
+            'cc6ae727523369645b8602ce1e777336443f28a5dfe3ed279cb744ffd93da71a'
+            '37e11b52836f12e58e669d39a9e9e3f1672d89c78dc572192f5a6c186c02adf7'
+            '95b65664c455f4895f480ab8e3ed9e96046ca69ee1b296922d76a369e2cf2846'
+            'e2f4114c8ff6bfe7e5a43b6c88fb47f32328ddb147578456ec0825aa76803b20'
+            'db92fd0f12aaf239cd94943d64dc3ea89e9967f571bb5103dcd39b4805197074'
+            '78bdcdc3dcb860324456beb75fb9c8730149aab2a8a467ceeb289406d01610f5'
+            '8c3f3fc34d7db9390136a4c6344f218c12f8dae514b1c6ca0fdf85298485ae3c')
 
 prepare() {
-	# location is .../src
-	export WD="$PWD"
-	export MSYS2=1
-	export MSYS=winsymlinks:lnk
-	export MINGW_PREFIX="${MINGW_PREFIX}"
-	export PLATFORM_PRETTY="MinGW-W64 MSYS2"
-	export PLATFORM_VER="$(uname -a)"
-	export TARGET_CPU="$(uname -m)"
-	export LPUB3D="${_realname}"
-	# Debug variables - remove after Dev
+    # location is .../src
+    export WD="$PWD"
+    export MSYS2=1
+    export MSYS=winsymlinks:lnk
+    export MINGW_PREFIX="${MINGW_PREFIX}"
+    export PLATFORM_PRETTY="MinGW-W64 MSYS2"
+    export PLATFORM_VER="$(uname -a)"
+    export TARGET_CPU="$(uname -m)"
+    export LPUB3D="${_realname}"
+    # Debug variables - remove after Dev
     # export LDRAWDIR="${HOME}/ldraw" - restore after Dev
-	export LDRAWDIR_ROOT="${WD}"
-	export LDRAWDIR="${WD}/ldraw"
-	export LP3D_NO_CLEANUP="true"
-	# Debug variables end
-	export LP3D_NO_DEPS="true"
-	export LP3D_LOG_PATH="${WD}"
-	export LP3D_CPU_CORES="$(nproc)"
-	export LP3D_QT5_BIN="${MINGW_PREFIX}/qt5-static/bin"
-	export LP3D_3RD_DIST_DIR="${_3rdpartydistdir}"
-	# create 3rd party assets folder
-	[ ! -d "${LP3D_3RD_DIST_DIR}" ] && mkdir -p "${srcdir}/${LP3D_3RD_DIST_DIR}" || :
-	cd "${srcdir}/${_srcname}"
-	# location is .../src/${_srcname}
-	# rename renderer source files
-	for SourceFile in \
-		../raytracer-cui.tar.gz \
-		../lpub3d-build.tar.gz \
-		../master.tar.gz; do
-		if [ -f "${SourceFile}" ]; then
-			[ "$(basename ${SourceFile})" = "raytracer-cui.tar.gz" ] && mv -f ${SourceFile} ../povray.tar.gz || :
-			[ "$(basename ${SourceFile})" = "lpub3d-build.tar.gz" ] && mv -f ${SourceFile} ../ldview.tar.gz || :
-			[ "$(basename ${SourceFile})" = "master.tar.gz" ] && mv -f ${SourceFile} ../ldglite.tar.gz || :
-		fi
-	done
-	# move ldraw archive libraries to LP3D_3RD_DIST_DIR and extras
-	for LDrawLibFile in \
-		../complete.zip \
-		../lpub3dldrawunf.zip \
-		../tenteparts.zip \
-		../vexiqparts.zip; do
-		if [ -f "${LDrawLibFile}" ]; then
-			LIB_CMD=cp
-			LIB_FILE="$(basename ${LDrawLibFile})"
-			[ ! -f "../${LP3D_3RD_DIST_DIR}/${LIB_FILE}" ] && \
-			${LIB_CMD} -f ${LDrawLibFile} ../${LP3D_3RD_DIST_DIR}/ || :
-			[ ! "${LIB_FILE}" = "complete.zip" ] && LIB_CMD=mv || :
-			${LIB_CMD} -f ${LDrawLibFile} mainApp/extras/
-		fi
-	done
-	# update version.info commit sha
-	LP3D_VER_INFO="builds/utilities/version.info"
-	[ -f "${LP3D_VER_INFO}" ] && \
-	sed -i "s/\w*$/${_sha:0:8}/" "${LP3D_VER_INFO}" || :
-	# create renderers
-	chmod a+x builds/utilities/CreateRenderers.sh && ./builds/utilities/CreateRenderers.sh
+    export LDRAWDIR_ROOT="${WD}"
+    export LDRAWDIR="${WD}/ldraw"
+    export LP3D_NO_CLEANUP="true"
+    export LP3D_NO_LOG_TAIL="true"
+    # Debug variables end
+    export LP3D_NO_DEPS="true"
+    export LP3D_LOG_PATH="${WD}"
+    export LP3D_CPU_CORES="$(nproc)"
+    export LP3D_QT5_BIN="${MINGW_PREFIX}/qt5-static/bin"
+    export LP3D_3RD_DIST_DIR="${_3rdpartydistdir}"
+    # create 3rd party assets folder
+    [ ! -d "${LP3D_3RD_DIST_DIR}" ] && mkdir -p "${srcdir}/${LP3D_3RD_DIST_DIR}" || :
+    cd "${srcdir}/${_srcname}"
+    # location is .../src/${_srcname}
+    # rename renderer source files
+    for SourceFile in \
+        ../raytracer-cui.tar.gz \
+        ../lpub3d-build.tar.gz \
+        ../master.tar.gz; do
+        if [ -f "${SourceFile}" ]; then
+            [ "$(basename ${SourceFile})" = "raytracer-cui.tar.gz" ] && mv -f ${SourceFile} ../povray.tar.gz || :
+            [ "$(basename ${SourceFile})" = "lpub3d-build.tar.gz" ] && mv -f ${SourceFile} ../ldview.tar.gz || :
+            [ "$(basename ${SourceFile})" = "master.tar.gz" ] && mv -f ${SourceFile} ../ldglite.tar.gz || :
+        fi
+    done
+    # move ldraw archive libraries to LP3D_3RD_DIST_DIR and extras
+    for LDrawLibFile in \
+        ../complete.zip \
+        ../lpub3dldrawunf.zip \
+        ../tenteparts.zip \
+        ../vexiqparts.zip; do
+        if [ -f "${LDrawLibFile}" ]; then
+            LIB_CMD=cp
+            LIB_FILE="$(basename ${LDrawLibFile})"
+            [ ! -f "../${LP3D_3RD_DIST_DIR}/${LIB_FILE}" ] && \
+            ${LIB_CMD} -f ${LDrawLibFile} ../${LP3D_3RD_DIST_DIR}/ || :
+            [ ! "${LIB_FILE}" = "complete.zip" ] && LIB_CMD=mv || :
+            ${LIB_CMD} -f ${LDrawLibFile} mainApp/extras/
+        fi
+    done
+    # update version.info commit sha
+    LP3D_VER_INFO="builds/utilities/version.info"
+    [ -f "${LP3D_VER_INFO}" ] && \
+    sed -i "s/\w*$/${_sha:0:8}/" "${LP3D_VER_INFO}" || :
+    # create renderers
+    chmod a+x builds/utilities/CreateRenderers.sh && ./builds/utilities/CreateRenderers.sh
 }
 
 build() {
-	cd "${srcdir}/${_srcname}"
-	export MSYS=winsymlinks:lnk
-	export MSYS2_ARG_CONV_EXCL="INSTALL_PREFIX="
-	export TARGET_VENDOR="MinGW-W64 MSYS2"
-	export PLATFORM_CODE="ap"
-	export PLATFORM_VER="$(uname -a)"
-	export TARGET_CPU="$(uname -m)"
-	export LD_LIBRARY_PATH=${MINGW_PREFIX}/qt5-static/bin:${MINGW_PREFIX}/bin:$LD_LIBRARY_PATH
-	# generate makefiles
-	${MINGW_PREFIX}/qt5-static/bin/qmake.exe \
-	PREFIX=${MINGW_PREFIX} \
-	CONFIG-=debug_and_release \
-	CONFIG+=release \
-	CONFIG+=build_check \
-	CONFIG+=msys
-	# build package
-	make clean
-	make -j$(nproc)
-	# check lpub3d dependencies
-	[[ "${TARGET_CPU}" = "x86_64" || "${TARGET_CPU}" = "aarch64" ]] && \
-	LP3D_RELEASE="64bit_release" || LP3D_RELEASE="32bit_release"
-	LP3D_SUFFIX=$(cat builds/utilities/version.info | cut -d " " -f 1-2 | sed s/" "//g)
-	LP3D_EXE="mainApp/${LP3D_RELEASE}/lpub3d${LP3D_SUFFIX}"
-	[ -f "${LP3D_EXE}" ] && ldd ${LP3D_EXE} 2>/dev/null || :
+    cd "${srcdir}/${_srcname}"
+    export MSYS=winsymlinks:lnk
+    export MSYS2_ARG_CONV_EXCL="INSTALL_PREFIX="
+    export TARGET_VENDOR="MinGW-W64 MSYS2"
+    export PLATFORM_CODE="ap"
+    export PLATFORM_VER="$(uname -a)"
+    export TARGET_CPU="$(uname -m)"
+    export LD_LIBRARY_PATH=${MINGW_PREFIX}/qt5-static/bin:${MINGW_PREFIX}/bin:$LD_LIBRARY_PATH
+    # generate makefiles
+    ${MINGW_PREFIX}/qt5-static/bin/qmake.exe \
+    PREFIX=${MINGW_PREFIX} \
+    CONFIG-=debug_and_release \
+    CONFIG+=build_check \
+    CONFIG+=shared \
+    CONFIG+=msys
+    # build package
+    make clean
+    make -j$(nproc)
+}
+
+check() {
+    # check lpub3d dependencies
+    [[ "${TARGET_CPU}" = "x86_64" || "${TARGET_CPU}" = "aarch64" ]] && \
+    LP3D_RELEASE="64bit_release" || LP3D_RELEASE="32bit_release"
+    LP3D_SUFFIX=$(cat builds/utilities/version.info | cut -d " " -f 1-2 | sed s/" "//g)
+    LP3D_EXE="mainApp/${LP3D_RELEASE}/lpub3d${LP3D_SUFFIX}"
+    [ -f "${LP3D_EXE}" ] && ldd ${LP3D_EXE} 2>/dev/null || :
 }
 
 package() {
-	cd "${srcdir}/${_srcname}"
-	make INSTALL_ROOT="${pkgdir}${MINGW_PREFIX}" install
+    cd "${srcdir}/${_srcname}"
+    make INSTALL_ROOT="${pkgdir}${MINGW_PREFIX}" install
 }
