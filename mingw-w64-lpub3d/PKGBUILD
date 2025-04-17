@@ -3,11 +3,13 @@
 #  Copyright (C) 2025 by Trevor SANDY
 
 _project=lpub3d-ci
-_sha=fe14347d305715eb62221b3e9274e70205b8f7fd
+_sha=5b4e84ca2a470ab4398850672446561857677d4c
 _srcname="${_project}-${_sha}"
 _ldglite="ldglite"
 _ldview="ldview"
 _povray="povray"
+_shadowbuild="sbuild"
+_platformid="$(echo $(uname -a) | grep -oP "\b\d{4}-\d{2}-\d{2}\b")"
 _3rdpartydistdir=lpub3d_msys_3rdparty
 pkgver=2.4.9.4406
 pkgrel=1
@@ -49,6 +51,7 @@ depends=(
     "${MINGW_PACKAGE_PREFIX}-mesa"
     "${MINGW_PACKAGE_PREFIX}-llvm-libs"
     "${MINGW_PACKAGE_PREFIX}-llvm")
+
 source=(
     "${_project}.tar.gz::${msys2_repository_url}/${_project}/archive/${_sha}.tar.gz"
     "${_povray}.tar.gz::${msys2_repository_url}/povray/archive/lpub3d/raytracer-cui.tar.gz"
@@ -66,7 +69,7 @@ noextract=(
     "lpub3dldrawunf.zip"
     "tenteparts.zip"
     "vexiqparts.zip")
-sha256sums=('55410c652201edbb5470d22b75d1f7f014d7768241507fa407d5eeb25a69b65d'
+sha256sums=('d9aeb57ec8059d9cd6d138a17661ee97b561ba25aed7f78a2294140d62d1323e'
             '2793182e702750daa9c3dea19b167c78d004846e44c4ad73b9c3ec34566e1dcb'
             '6575bb3cdfdabbd1dce2fc3c08977287abeb9cff39de2f3814064d36fc948662'
             'c7491afb6975b0b86e435968981e75f0e5d1779fc6b7fd384c95bd487ff7b347'
@@ -82,35 +85,27 @@ prepare() {
     export MSYS=winsymlinks:lnk
     export MINGW_PREFIX="${MINGW_PREFIX}"
     export PLATFORM_PRETTY="MinGW-W64 MSYS2"
-    export PLATFORM_VER="$(uname -a)"
+    export PLATFORM_VER="${_platformid//-/.}"
     export TARGET_CPU="$(uname -m)"
     export LPUB3D="${_project}"
-    # Debug variables - remove after Dev
-    # export LDRAWDIR="${HOME}/ldraw" - restore after Dev
+    # Debug
+    # export LDRAWDIR="${HOME}/ldraw" - restore
     export LDRAWDIR_ROOT="${WD}"
     export LDRAWDIR="${WD}/ldraw"
     export LP3D_NO_CLEANUP="true"
     export LP3D_NO_LOG_TAIL="true"
-    # Debug variables end
+    # Debug end
     export LP3D_NO_DEPS="true"
     export LP3D_LOG_PATH="${WD}"
     export LP3D_CPU_CORES="$(nproc)"
     export LP3D_QT5_BIN="${MINGW_PREFIX}/qt5-static/bin"
     export LP3D_3RD_DIST_DIR="${_3rdpartydistdir}"
+    # create build folder
+    [ ! -d "${srcdir}/${_shadowbuild}" ] && mkdir -p "${srcdir}/${_shadowbuild}" || :
     # create 3rd party assets folder
     [ ! -d "${LP3D_3RD_DIST_DIR}" ] && mkdir -p "${srcdir}/${LP3D_3RD_DIST_DIR}" || :
+    # create 3rd party assets folder
     cd "${srcdir}/${_srcname}"
-    # rename renderer source files
-    for SourceFile in \
-        ../raytracer-cui.tar.gz \
-        ../lpub3d-build.tar.gz \
-        ../master.tar.gz; do
-        if [ -f "${SourceFile}" ]; then
-            [ "$(basename ${SourceFile})" = "raytracer-cui.tar.gz" ] && mv -f ${SourceFile} ../povray.tar.gz || :
-            [ "$(basename ${SourceFile})" = "lpub3d-build.tar.gz" ] && mv -f ${SourceFile} ../ldview.tar.gz || :
-            [ "$(basename ${SourceFile})" = "master.tar.gz" ] && mv -f ${SourceFile} ../ldglite.tar.gz || :
-        fi
-    done
     # move ldraw archive libraries to LP3D_3RD_DIST_DIR and extras
     for LDrawLibFile in \
         ../complete.zip \
@@ -140,24 +135,27 @@ build() {
     export MSYS2_ARG_CONV_EXCL="INSTALL_PREFIX="
     export TARGET_VENDOR="MinGW-W64 MSYS2"
     export PLATFORM_CODE="ap"
-    export PLATFORM_VER="$(uname -a)"
+    export PLATFORM_VER="${_platformid//-/.}"
     export TARGET_CPU="$(uname -m)"
     export LD_LIBRARY_PATH=${MINGW_PREFIX}/qt5-static/bin:${MINGW_PREFIX}/bin:$LD_LIBRARY_PATH
     # generate makefiles
+	[ -d "${srcdir}/${_shadowbuild}" ] && cd "${srcdir}/${_shadowbuild}" || :
     ${MINGW_PREFIX}/qt5-static/bin/qmake.exe \
     PREFIX=${MINGW_PREFIX} \
     CONFIG-=debug_and_release \
     CONFIG+=build_check \
     CONFIG+=shared \
-    CONFIG+=msys
+    CONFIG+=msys \
+	../${_srcname}/LPub3D.pro \
+	
     # build package
-    make clean
+    # make clean
     make -j$(nproc)
 }
 
 check() {
     # check lpub3d dependencies
-	cd "${srcdir}/${_srcname}"
+    cd "${srcdir}/${_shadowbuild}"
     [[ "${TARGET_CPU}" = "x86_64" || "${TARGET_CPU}" = "aarch64" ]] && \
     LP3D_RELEASE="64bit_release" || LP3D_RELEASE="32bit_release"
     LP3D_SUFFIX=$(cat builds/utilities/version.info | cut -d " " -f 1-2 | sed s/" "//g)
@@ -166,6 +164,6 @@ check() {
 }
 
 package() {
-    cd "${srcdir}/${_srcname}"
+    cd "${srcdir}/${_shadowbuild}"
     make INSTALL_ROOT="${pkgdir}${MINGW_PREFIX}" install
 }
