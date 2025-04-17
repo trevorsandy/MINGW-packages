@@ -2,16 +2,17 @@
 #  Last Update: April 17, 2025
 #  Copyright (C) 2025 by Trevor SANDY
 
-_realname=lpub3d-ci
-_sha=7a3ff5b553537dcb22c70b1a97487a4386725be0
-# Debug srcname - remove after Dev
-_srcname="${_realname}"
-#_srcname="${_realname}-${_sha:0:8}" - restore after Dev
+_project=lpub3d-ci
+_sha=fe14347d305715eb62221b3e9274e70205b8f7fd
+_srcname="${_project}-${_sha}"
+_ldglite="ldglite"
+_ldview="ldview"
+_povray="povray"
 _3rdpartydistdir=lpub3d_msys_3rdparty
-pkgbase=mingw-w64-${_realname}
-pkgname=("${MINGW_PACKAGE_PREFIX}-${_realname}")
-pkgver=2.4.9.4393
+pkgver=2.4.9.4406
 pkgrel=1
+pkgbase=mingw-w64-${_project}
+pkgname=("${MINGW_PACKAGE_PREFIX}-${_project}")
 pkgdesc='An LDraw Building Instruction Editor'
 arch=('any')
 mingw_arch=('mingw64' 'ucrt64' 'clang64' 'clangarm64')
@@ -48,40 +49,31 @@ depends=(
     "${MINGW_PACKAGE_PREFIX}-mesa"
     "${MINGW_PACKAGE_PREFIX}-llvm-libs"
     "${MINGW_PACKAGE_PREFIX}-llvm")
-# Debug source - remove after Dev
 source=(
-    'lpub3d-ci.tar.gz'
-    'complete.zip'
-    'lpub3dldrawunf.zip'
-    'tenteparts.zip'
-    'vexiqparts.zip'
-    'povray.tar.gz'
-    'ldview.tar.gz'
-    'ldglite.tar.gz')
-#source=(
-#   "${msys2_repository_url}/archive/${_realname}/archive/${_sha}.tar.gz"
-#   "${msys2_repository_url}/lpub3d_libs/releases/download/v1.0.1/complete.zip"
-#   "${msys2_repository_url}/lpub3d_libs/releases/download/v1.0.1/lpub3dldrawunf.zip"
-#   "${msys2_repository_url}/lpub3d_libs/releases/download/v1.0.1/tenteparts.zip"
-#   "${msys2_repository_url}/lpub3d_libs/releases/download/v1.0.1/vexiqparts.zip"
-#   "${msys2_repository_url}/povray/archive/lpub3d/raytracer-cui.tar.gz"
-#   "${msys2_repository_url}/ldview/archive/lpub3d-build.tar.gz"
-#   "${msys2_repository_url}/ldglite/archive/master.tar.gz")
-noextract=('complete.zip'
-    'lpub3dldrawunf.zip'
-    'tenteparts.zip'
-    'vexiqparts.zip'
-    'povray.tar.gz'
-    'ldview.tar.gz'
-    'ldglite.tar.gz')
-sha256sums=('906c30a1c26b2940002f4d3264ef2fcca2da0cda01f344a7f956243c414966fa'
+    "${_project}.tar.gz::${msys2_repository_url}/${_project}/archive/${_sha}.tar.gz"
+    "${_povray}.tar.gz::${msys2_repository_url}/povray/archive/lpub3d/raytracer-cui.tar.gz"
+    "${_ldview}.tar.gz::${msys2_repository_url}/ldview/archive/lpub3d-build.tar.gz"
+    "${_ldglite}.tar.gz::${msys2_repository_url}/ldglite/archive/master.tar.gz"
+    "${msys2_repository_url}/lpub3d_libs/releases/download/v1.0.1/complete.zip"
+    "${msys2_repository_url}/lpub3d_libs/releases/download/v1.0.1/lpub3dldrawunf.zip"
+    "${msys2_repository_url}/lpub3d_libs/releases/download/v1.0.1/tenteparts.zip"
+    "${msys2_repository_url}/lpub3d_libs/releases/download/v1.0.1/vexiqparts.zip")
+noextract=(
+    "${_povray}.tar.gz"
+    "${_ldview}.tar.gz"
+    "${_ldglite}.tar.gz"
+    "complete.zip"
+    "lpub3dldrawunf.zip"
+    "tenteparts.zip"
+    "vexiqparts.zip")
+sha256sums=('55410c652201edbb5470d22b75d1f7f014d7768241507fa407d5eeb25a69b65d'
+            '2793182e702750daa9c3dea19b167c78d004846e44c4ad73b9c3ec34566e1dcb'
+            '6575bb3cdfdabbd1dce2fc3c08977287abeb9cff39de2f3814064d36fc948662'
+            'c7491afb6975b0b86e435968981e75f0e5d1779fc6b7fd384c95bd487ff7b347'
             'cc6ae727523369645b8602ce1e777336443f28a5dfe3ed279cb744ffd93da71a'
             '37e11b52836f12e58e669d39a9e9e3f1672d89c78dc572192f5a6c186c02adf7'
             '95b65664c455f4895f480ab8e3ed9e96046ca69ee1b296922d76a369e2cf2846'
-            'e2f4114c8ff6bfe7e5a43b6c88fb47f32328ddb147578456ec0825aa76803b20'
-            'db92fd0f12aaf239cd94943d64dc3ea89e9967f571bb5103dcd39b4805197074'
-            '78bdcdc3dcb860324456beb75fb9c8730149aab2a8a467ceeb289406d01610f5'
-            '8c3f3fc34d7db9390136a4c6344f218c12f8dae514b1c6ca0fdf85298485ae3c')
+            'e2f4114c8ff6bfe7e5a43b6c88fb47f32328ddb147578456ec0825aa76803b20')
 
 prepare() {
     # location is .../src
@@ -92,7 +84,7 @@ prepare() {
     export PLATFORM_PRETTY="MinGW-W64 MSYS2"
     export PLATFORM_VER="$(uname -a)"
     export TARGET_CPU="$(uname -m)"
-    export LPUB3D="${_realname}"
+    export LPUB3D="${_project}"
     # Debug variables - remove after Dev
     # export LDRAWDIR="${HOME}/ldraw" - restore after Dev
     export LDRAWDIR_ROOT="${WD}"
@@ -108,7 +100,6 @@ prepare() {
     # create 3rd party assets folder
     [ ! -d "${LP3D_3RD_DIST_DIR}" ] && mkdir -p "${srcdir}/${LP3D_3RD_DIST_DIR}" || :
     cd "${srcdir}/${_srcname}"
-    # location is .../src/${_srcname}
     # rename renderer source files
     for SourceFile in \
         ../raytracer-cui.tar.gz \
@@ -166,6 +157,7 @@ build() {
 
 check() {
     # check lpub3d dependencies
+	cd "${srcdir}/${_srcname}"
     [[ "${TARGET_CPU}" = "x86_64" || "${TARGET_CPU}" = "aarch64" ]] && \
     LP3D_RELEASE="64bit_release" || LP3D_RELEASE="32bit_release"
     LP3D_SUFFIX=$(cat builds/utilities/version.info | cut -d " " -f 1-2 | sed s/" "//g)
