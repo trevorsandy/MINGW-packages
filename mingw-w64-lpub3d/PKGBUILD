@@ -1,9 +1,9 @@
 # Maintainer: Trevor SANDY <trevor[dot]sandy[at]gmail[dot]com>
-#  Last Update: April 24, 2025
+#  Last Update: May 05, 2025
 #  Copyright (C) 2025 by Trevor SANDY
 
 _project=lpub3d-ci
-_sha=ea4791586851b46804b16fc9b09ffb152efba93b
+_sha=5a3dd44daa70c1d191ad74cd89a646a217366bac
 _srcname="${_project}-${_sha}"
 _ldglite="ldglite"
 _ldview="ldview"
@@ -32,8 +32,11 @@ makedepends=(
     "${MINGW_PACKAGE_PREFIX}-ninja"
     "${MINGW_PACKAGE_PREFIX}-qt5-tools")
 depends=(
+    "icu"
+    "openssl"
     "xorgproto"
     "xorg-util-macros"
+	"${MINGW_PACKAGE_PREFIX}-angleproject"
     "${MINGW_PACKAGE_PREFIX}-qt5-base"
     "${MINGW_PACKAGE_PREFIX}-libpng"
     "${MINGW_PACKAGE_PREFIX}-libtiff"
@@ -42,6 +45,8 @@ depends=(
     "${MINGW_PACKAGE_PREFIX}-tinyxml"
     "${MINGW_PACKAGE_PREFIX}-minizip"
     "${MINGW_PACKAGE_PREFIX}-glew"
+	"${MINGW_PACKAGE_PREFIX}-egl-headers"
+	"${MINGW_PACKAGE_PREFIX}-gles-headers"
     "${MINGW_PACKAGE_PREFIX}-freeglut"
     "${MINGW_PACKAGE_PREFIX}-boost-libs"
     "${MINGW_PACKAGE_PREFIX}-boost"
@@ -55,7 +60,7 @@ depends=(
 source=(
     "${_project}.tar.gz::${msys2_repository_url}/${_project}/archive/${_sha}.tar.gz"
     "${_povray}.tar.gz::${msys2_repository_url}/povray/archive/lpub3d/raytracer-cui.tar.gz"
-    "${_ldview}.tar.gz::${msys2_repository_url}/ldview/archive/lpub3d-build.tar.gz"
+    "${_ldview}.tar.gz::${msys2_repository_url}/ldview/archive/MSYS2_BUILD.tar.gz" # MSYS2_BUILD => lpub3d-build
     "${_ldglite}.tar.gz::${msys2_repository_url}/ldglite/archive/master.tar.gz"
     "${msys2_repository_url}/lpub3d_libs/releases/download/v1.0.1/complete.zip"
     "${msys2_repository_url}/lpub3d_libs/releases/download/v1.0.1/lpub3dldrawunf.zip"
@@ -69,10 +74,10 @@ noextract=(
     "lpub3dldrawunf.zip"
     "tenteparts.zip"
     "vexiqparts.zip")
-sha256sums=('ef630072fa5cf3f7e2878b7f009a9a46ce1192de2dc34d6510084b6e49402dd4'
+sha256sums=('2b8161d7fb2edffc4e7671d71363092d45b071281d88d2c8e10dd98e0197cc0d'
             '2793182e702750daa9c3dea19b167c78d004846e44c4ad73b9c3ec34566e1dcb'
-            '6575bb3cdfdabbd1dce2fc3c08977287abeb9cff39de2f3814064d36fc948662'
-            'c7491afb6975b0b86e435968981e75f0e5d1779fc6b7fd384c95bd487ff7b347'
+            '9136dede9b3916e1ee7f777321d4520b7da8784c0c9999641824aa9068cbd3ff'
+            '609043d7b4b6fe0280bb6eb5b26edd269dd5fc3ae78f9bff84579d25c0c4b5ca'
             'cc6ae727523369645b8602ce1e777336443f28a5dfe3ed279cb744ffd93da71a'
             '37e11b52836f12e58e669d39a9e9e3f1672d89c78dc572192f5a6c186c02adf7'
             '95b65664c455f4895f480ab8e3ed9e96046ca69ee1b296922d76a369e2cf2846'
@@ -84,7 +89,7 @@ prepare() {
     export MSYS2=1
     export MSYS=winsymlinks:lnk
     export MINGW_PREFIX="${MINGW_PREFIX}"
-    export PLATFORM_PRETTY="MSYS2 ${MSYSTEM}"
+    export PLATFORM_PRETTY="MINGW-W64 ${MSYSTEM}"
     export PLATFORM_VER="${MSYSTEM}_${_platformid//-/.}"
     export LPUB3D="${_project}"
     export TARGET_CPU="$(uname -m)"
@@ -95,9 +100,9 @@ prepare() {
     export LP3D_NO_DEPS="true"
     export LP3D_LOG_PATH="${WD}"
     export LP3D_CPU_CORES="$(nproc)"
-    export LP3D_LDVIEW_CUI_OPT="ldviewqt"
+    export LP3D_LDVIEW_CUI_OPT="ldviewwgl"
     export LP3D_3RD_DIST_DIR="${_3rdpartydistdir}"
-    export LP3D_QT5_BIN="${MINGW_PREFIX}/qt5-static/bin"
+    export LP3D_QT5_BIN="${MINGW_PREFIX}/bin"
     # create build folder
     [ ! -d "${srcdir}/${_shadowbuild}" ] && mkdir -p "${srcdir}/${_shadowbuild}" || :
     # create 3rd party assets folder
@@ -138,10 +143,10 @@ build() {
     # generate makefiles
     [ -d "${srcdir}/${_shadowbuild}" ] && \
     cd "${srcdir}/${_shadowbuild}"     && \
-    ${MINGW_PREFIX}/qt5-static/bin/qmake.exe \
+    ${MINGW_PREFIX}/bin/qmake.exe \
     PREFIX=${MINGW_PREFIX} \
     CONFIG-=debug_and_release \
-    CONFIG+=ldviewqt \
+    CONFIG+=ldviewwgl \
     CONFIG+=msys \
     ../${_srcname}/LPub3D.pro || :
     # build package
@@ -184,7 +189,7 @@ check() {
         cp -f ${POVRAY_}/lpub3d_trace_cui.exe ${LP3D_3RDPARTY}/lpub3d_trace_cui-3.8/bin/
     fi
     # setup extras folder
-	[ ! -d "${LP3D_RELEASE}/extras" ] && \
+    [ ! -d "${LP3D_RELEASE}/extras" ] && \
     cp -rf ${srcdir}/${_srcname}/mainApp/extras ${LP3D_RELEASE}/ || :
     # setup build check folder
     [ ! -d "${LP3D_RELEASE}/builds" ] && mkdir -p ${LP3D_RELEASE}/builds && \
