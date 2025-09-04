@@ -1,17 +1,21 @@
 # Maintainer: Trevor SANDY <trevor[dot]sandy[at]gmail[dot]com>
-#  Last Update: May 05, 2025
+#  Last Update: September 04, 2025
 #  Copyright (C) 2025 by Trevor SANDY
 
 _project=lpub3d-ci
-_sha=5a3dd44daa70c1d191ad74cd89a646a217366bac
-_srcname="${_project}-${_sha}"
+_sha=f2f7dfe2af7a8ac9b148787345218ebc72b4ad88
 _ldglite="ldglite"
 _ldview="ldview"
 _povray="povray"
+_osmesa="mesa-21.3.9"
+_glu="glu-9.0.1"
+_zstd="zstd-1.5.7"
 _shadowbuild="sbuild"
+_ldview_opt="ldviewwgl"
+_srcname="${_project}-${_sha}"
 _platformid="$(echo $(uname -a) | grep -oP "\b\d{4}-\d{2}-\d{2}\b")"
 _3rdpartydistdir=lpub3d_msys_3rdparty
-pkgver=2.4.9.4406
+pkgver=2.4.9.4801
 pkgrel=1
 pkgbase=mingw-w64-${_project}
 pkgname=("${MINGW_PACKAGE_PREFIX}-${_project}")
@@ -30,24 +34,25 @@ makedepends=(
     "${MINGW_PACKAGE_PREFIX}-make"
     "${MINGW_PACKAGE_PREFIX}-cmake"
     "${MINGW_PACKAGE_PREFIX}-ninja"
-    "${MINGW_PACKAGE_PREFIX}-qt5-tools")
+    "${MINGW_PACKAGE_PREFIX}-qt6-tools")
 depends=(
     "icu"
     "openssl"
     "xorgproto"
     "xorg-util-macros"
-	"${MINGW_PACKAGE_PREFIX}-angleproject"
-    "${MINGW_PACKAGE_PREFIX}-qt5-base"
+    "${MINGW_PACKAGE_PREFIX}-qt6-base"
+    "${MINGW_PACKAGE_PREFIX}-qt6-5compat"
     "${MINGW_PACKAGE_PREFIX}-libpng"
     "${MINGW_PACKAGE_PREFIX}-libtiff"
     "${MINGW_PACKAGE_PREFIX}-libjpeg-turbo"
     "${MINGW_PACKAGE_PREFIX}-gl2ps"
     "${MINGW_PACKAGE_PREFIX}-tinyxml"
     "${MINGW_PACKAGE_PREFIX}-minizip"
-    "${MINGW_PACKAGE_PREFIX}-glew"
-	"${MINGW_PACKAGE_PREFIX}-egl-headers"
-	"${MINGW_PACKAGE_PREFIX}-gles-headers"
     "${MINGW_PACKAGE_PREFIX}-freeglut"
+    "${MINGW_PACKAGE_PREFIX}-glew"
+    "${MINGW_PACKAGE_PREFIX}-angleproject"
+    "${MINGW_PACKAGE_PREFIX}-egl-headers"
+    "${MINGW_PACKAGE_PREFIX}-gles-headers"
     "${MINGW_PACKAGE_PREFIX}-boost-libs"
     "${MINGW_PACKAGE_PREFIX}-boost"
     "${MINGW_PACKAGE_PREFIX}-openexr"
@@ -56,12 +61,14 @@ depends=(
     "${MINGW_PACKAGE_PREFIX}-mesa"
     "${MINGW_PACKAGE_PREFIX}-llvm-libs"
     "${MINGW_PACKAGE_PREFIX}-llvm")
-
 source=(
     "${_project}.tar.gz::${msys2_repository_url}/${_project}/archive/${_sha}.tar.gz"
     "${_povray}.tar.gz::${msys2_repository_url}/povray/archive/lpub3d/raytracer-cui.tar.gz"
-    "${_ldview}.tar.gz::${msys2_repository_url}/ldview/archive/MSYS2_BUILD.tar.gz" # MSYS2_BUILD => lpub3d-build
+    "${_ldview}.tar.gz::${msys2_repository_url}/ldview/archive/lpub3d-build.tar.gz"
     "${_ldglite}.tar.gz::${msys2_repository_url}/ldglite/archive/master.tar.gz"
+    "${msys2_repository_url}/lpub3d_libs/releases/download/v1.0.1/${_osmesa}.tar.xz"
+    "${msys2_repository_url}/lpub3d_libs/releases/download/v1.0.1/${_glu}.tar.xz"
+    "${msys2_repository_url}/lpub3d_libs/releases/download/v1.0.1/${_zstd}.tar.gz"
     "${msys2_repository_url}/lpub3d_libs/releases/download/v1.0.1/complete.zip"
     "${msys2_repository_url}/lpub3d_libs/releases/download/v1.0.1/lpub3dldrawunf.zip"
     "${msys2_repository_url}/lpub3d_libs/releases/download/v1.0.1/tenteparts.zip"
@@ -70,16 +77,22 @@ noextract=(
     "${_povray}.tar.gz"
     "${_ldview}.tar.gz"
     "${_ldglite}.tar.gz"
+    "${_osmesa}.tar.xz"
+    "${_glu}.tar.xz"
+    "${_zstd}.tar.gz"
     "complete.zip"
     "lpub3dldrawunf.zip"
     "tenteparts.zip"
     "vexiqparts.zip")
-sha256sums=('2b8161d7fb2edffc4e7671d71363092d45b071281d88d2c8e10dd98e0197cc0d'
-            '2793182e702750daa9c3dea19b167c78d004846e44c4ad73b9c3ec34566e1dcb'
-            '9136dede9b3916e1ee7f777321d4520b7da8784c0c9999641824aa9068cbd3ff'
-            '609043d7b4b6fe0280bb6eb5b26edd269dd5fc3ae78f9bff84579d25c0c4b5ca'
-            'cc6ae727523369645b8602ce1e777336443f28a5dfe3ed279cb744ffd93da71a'
-            '37e11b52836f12e58e669d39a9e9e3f1672d89c78dc572192f5a6c186c02adf7'
+sha256sums=('52115b46f603b80f57bafb37334632ede9d0dafa7c0265857d706fbf31abc7e0'
+            '7f953c1f0c44c8b0377efc30ef9c7d511c130b476762fc73dc6857d943dbcc5f'
+            '48e2b814ef9c48c3b6e5b2ab72bf2c1bdc8ab22a84618d34a4741de98cbc2d48'
+            'abc36955f33f664103f51d9ef1cc567df7c3cc22af4fc3b6532fbc5de00af2c9'
+            '91fe6f20339884e37a7c47bfba42fb1cd397512c9ed5ad423de369f047cd8b5c'
+            'fb5a4c2dd6ba6d1c21ab7c05129b0769544e1d68e1e3b0ffecb18e73c93055bc'
+            'eb33e51f49a15e023950cd7825ca74a4a2b43db8354825ac24fc1b7ee09e6fa3'
+            'a4ab15366d22ae0589901ec15bcc465fd5bb5b6057661b91b89b810f98a56c06'
+            'a22da755a9c10cecf37928f4c951be00be9149146914de2a2b7a526906fdfd0e'
             '95b65664c455f4895f480ab8e3ed9e96046ca69ee1b296922d76a369e2cf2846'
             'e2f4114c8ff6bfe7e5a43b6c88fb47f32328ddb147578456ec0825aa76803b20')
 
@@ -100,9 +113,9 @@ prepare() {
     export LP3D_NO_DEPS="true"
     export LP3D_LOG_PATH="${WD}"
     export LP3D_CPU_CORES="$(nproc)"
-    export LP3D_LDVIEW_CUI_OPT="ldviewwgl"
+    export LP3D_LDVIEW_CUI_OPT="${_ldview_opt}"
     export LP3D_3RD_DIST_DIR="${_3rdpartydistdir}"
-    export LP3D_QT5_BIN="${MINGW_PREFIX}/bin"
+    export LP3D_QT_BIN="${MINGW_PREFIX}/bin"
     # create build folder
     [ ! -d "${srcdir}/${_shadowbuild}" ] && mkdir -p "${srcdir}/${_shadowbuild}" || :
     # create 3rd party assets folder
@@ -140,49 +153,63 @@ build() {
     export PLATFORM_CODE="ap"
     export TARGET_VENDOR="MSYS2"
     export TARGET_CPU="$(uname -m)"
+    if [ -f "${MINGW_PREFIX}/bin/qmake6.exe" >/dev/null 2>&1 ]; then
+        QMAKE_EXEC=qmake6.exe
+    elif [ -f "${MINGW_PREFIX}/bin/qmake-qt5.exe" >/dev/null 2>&1 ]; then
+        QMAKE_EXEC=qmake-qt5.exe
+	elif [ -f "${MINGW_PREFIX}/bin/qmake.exe" >/dev/null 2>&1 ]; then
+	    QMAKE_EXEC=qmake.exe
+    else
+	    exit 1
+    fi
     # generate makefiles
     [ -d "${srcdir}/${_shadowbuild}" ] && \
     cd "${srcdir}/${_shadowbuild}"     && \
-    ${MINGW_PREFIX}/bin/qmake.exe \
+    ${MINGW_PREFIX}/bin/${QMAKE_EXEC} \
     PREFIX=${MINGW_PREFIX} \
     CONFIG-=debug_and_release \
-    CONFIG+=ldviewwgl \
+    CONFIG+=BUILD_LDV_LIBS \
+    CONFIG+=USE_LDV_3RD_PARTY_LIBS \
+    CONFIG+="${_ldview_opt}" \
     CONFIG+=msys \
     ../${_srcname}/LPub3D.pro || :
     # build package
-    # make clean
+    make clean
     make -j$(nproc)
 }
 
 check() {
+    # pre-package build test
     cd "${srcdir}/${_shadowbuild}"
     TARGET_CPU="$(uname -m)"
     [[ "${TARGET_CPU}" = "x86_64" || "${TARGET_CPU}" = "aarch64" ]] && \
     LP3D_RELEASE="${PWD}/mainApp/64bit_release" || LP3D_RELEASE="${PWD}/mainApp/32bit_release"
     LP3D_3RDPARTY="${LP3D_RELEASE}/3rdParty"
-    LDVIEW_="../${_3rdpartydistdir}/ldview-4.5/bin/${TARGET_CPU}"
+    LDVIEW_="../${_3rdpartydistdir}/ldview-4.6/bin/${TARGET_CPU}"
     LDGLITE_="../${_3rdpartydistdir}/ldglite-1.3/bin/${TARGET_CPU}"
     POVRAY_="../${_3rdpartydistdir}/lpub3d_trace_cui-3.8/bin/${TARGET_CPU}"
-    export MSYS2=1
+    export LP3D_LOG_PATH="${srcdir}"
     export LP3D_BUILD_OS=$(echo ${MSYSTEM} | awk '{print tolower($0)}')
     export LPUB3D_EXE=${LP3D_RELEASE}/lpub3d.exe
-    export LDVIEW_EXE=${LP3D_RELEASE}/3rdParty/ldview-4.5/bin/ldview.exe
+    export LDVIEW_EXE=${LP3D_RELEASE}/3rdParty/ldview-4.6/bin/ldview.exe
     export LDGLITE_EXE=${LP3D_RELEASE}/3rdParty/ldglite-1.3/bin/ldglite.exe
     export POVRAY_EXE=${LP3D_RELEASE}/3rdParty/lpub3d_trace_cui-3.8/bin/lpub3d_trace_cui.exe
     export SOURCE_DIR="${LP3D_RELEASE}"
     export LDRAWDIR="${srcdir}/ldraw"
-    # setup 3rdParty folder
+    # setup LDVeiew renderer
     if [ -f "${LDVIEW_}/ldview.exe" ]; then
-        [ ! -d "${LP3D_3RDPARTY}/ldview-4.5" ] && \
-        mkdir -p ${LP3D_3RDPARTY}/ldview-4.5/bin || :
-        cp -f ${LDVIEW_}/ldview.exe ${LP3D_3RDPARTY}/ldview-4.5/bin/
-        cp -rf ${LDVIEW_}/../../resources/config ${LP3D_3RDPARTY}/ldview-4.5/
+        [ ! -d "${LP3D_3RDPARTY}/ldview-4.6" ] && \
+        mkdir -p ${LP3D_3RDPARTY}/ldview-4.6/bin || :
+        cp -f ${LDVIEW_}/ldview.exe ${LP3D_3RDPARTY}/ldview-4.6/bin/
+        cp -rf ${LDVIEW_}/../../resources/config ${LP3D_3RDPARTY}/ldview-4.6/
     fi
+    # setup LDGLite renderer
     if [ -f "${LDGLITE_}/ldglite.exe" ]; then
         [ ! -d "${LP3D_3RDPARTY}/ldglite-1.3" ] && \
         mkdir -p ${LP3D_3RDPARTY}/ldglite-1.3/bin || :
         cp -f ${LDGLITE_}/ldglite.exe ${LP3D_3RDPARTY}/ldglite-1.3/bin/
     fi
+    # setup POVRay renderer
     if [ -f "${POVRAY_}/lpub3d_trace_cui.exe" ]; then
         [ ! -d "${LP3D_3RDPARTY}/lpub3d_trace_cui-3.8" ] && \
         mkdir -p ${LP3D_3RDPARTY}/lpub3d_trace_cui-3.8/bin || :
@@ -193,10 +220,18 @@ check() {
     cp -rf ${srcdir}/${_srcname}/mainApp/extras ${LP3D_RELEASE}/ || :
     # setup build check folder
     [ ! -d "${LP3D_RELEASE}/builds" ] && mkdir -p ${LP3D_RELEASE}/builds && \
-    cp -rf ${srcdir}/${_srcname}/builds/check ${LP3D_RELEASE}/builds/ | :
+    cp -rf ${srcdir}/${_srcname}/builds/check ${LP3D_RELEASE}/builds/ || :
+    # remove old build check runtime files
+    [ -d "${srcdir}/${_srcname}/builds/check/LPub3D" ] && \
+    (cd ${srcdir}/${_srcname}/builds/check/ && \
+     find . -type d -name "LPub3D" -prune -exec rm -rf {} \;) || :
+    # perform checks
     if [ -f "${LPUB3D_EXE}" ]; then
         # perform dependency check
         ldd "${LPUB3D_EXE}" 2>/dev/null || :
+        # deploy Qt dependent libraries
+        [ ! -f "${LP3D_RELEASE}/Qt5Core.dll" ] && \
+        (cd ${LP3D_RELEASE} && windeployqt.exe --no-translations lpub3d.exe) || :
         # perform build check
         (cd ${LP3D_RELEASE}/builds/check && chmod a+x build_checks.sh && ./build_checks.sh)
     fi
@@ -204,5 +239,6 @@ check() {
 
 package() {
     cd "${srcdir}/${_shadowbuild}"
-    make INSTALL_ROOT="${pkgdir}" install
+    _install_root=$(python -c "import os; drive, path = os.path.splitdrive('$(cygpath -m ${pkgdir})'); print(path)")
+    make INSTALL_ROOT="${_install_root}${MINGW_PREFIX}" install
 }
